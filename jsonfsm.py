@@ -162,6 +162,9 @@ def array_fsm():
         while c not in (',', ']') or value is NOT_PARSED_YET:
             value = vp.send(c)
             c = (yield NOT_PARSED_YET)
+            if value is not NOT_PARSED_YET:
+                while c.isspace():
+                    c = (yield NOT_PARSED_YET)
 
         array.append(value)
 
@@ -214,6 +217,9 @@ def object_fsm():
         while c not in (',', '}') or value is NOT_PARSED_YET:
             value = vp.send(c)
             c = (yield NOT_PARSED_YET)
+            if value is not NOT_PARSED_YET:
+                while c.isspace():
+                    c = (yield NOT_PARSED_YET)
 
         obj[key] = value
 
