@@ -337,7 +337,9 @@ def loads(json, encoding = "utf-8"):
     Load a JSON object from a string.
     '''
 
-    json = unicode(json, encoding)
+    if not isinstance(json, unicode):
+        json = unicode(json, encoding)
+
     parser = value_fsm()
     for c in json.strip():
         ret = parser.send(c)
