@@ -342,4 +342,7 @@ def loads(json, encoding = "utf-8"):
     for c in json.strip():
         ret = parser.send(c)
 
+    if ret is NOT_PARSED_YET:
+        raise JSONParseError("Failed to parse JSON value")
+
     return ret
