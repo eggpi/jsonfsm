@@ -11,6 +11,8 @@ class TestString(unittest.TestCase):
         self.another_python_string = u"Isto é uma string de teste."
         self.another_json_string = '"' + self.another_python_string + '"'
 
+        self.multiline_json_string = '"Never been good enough\nTo write Haiku."'
+
     def test_decode(self):
         res = jsonfsm.loads(self.json_string)
 
@@ -40,6 +42,8 @@ class TestString(unittest.TestCase):
         self.assertEquals(res, jsonfsm.loads(self.another_json_string))
         self.assertEquals(res, self.another_python_string)
 
+    def test_control_characters(self):
+        self.assertTrue('\n' in jsonfsm.loads(self.multiline_json_string))
 
 if __name__ == "__main__":
     unittest.main()

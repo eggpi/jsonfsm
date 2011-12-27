@@ -103,6 +103,12 @@ def string_fsm():
                     hexval += (yield NOT_PARSED_YET)
 
                 value.append(unichr(int(hexval, 16)))
+            elif c == 'b': value.append('\b')
+            elif c == 'f': value.append('\f')
+            elif c == 'n': value.append('\n')
+            elif c == 'r': value.append('\r')
+            elif c == 't': value.append('\t')
+            elif c in ('"', '\\', '/'): value.append(c)
         else:
             value.append(c)
 
