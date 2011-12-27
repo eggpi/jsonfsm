@@ -1,4 +1,62 @@
 #-*- coding: utf-8 -*-
+# Copyright (C) 2011 Guilherme P. Gonçalves
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the "Software"), to deal in
+# the Software without restriction, including without limitation the rights to
+# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+# of the Software, and to permit persons to whom the Software is furnished to do
+# so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+
+'''
+JSON FSM is a JSON parser build from finite state machines implemended as
+Python coroutines. It has been tested on Python 2.7 only. I do plan on
+porting to Python 3 eventually, but don't hold me to it :)
+
+Currently only decoding is implemented. There are no plans to support encoding
+right now.
+
+As you might expect, JSON objects are decoded into Python dictionaries, JSON
+strings into Python unicode strings, JSON arrays into Python lists and JSON
+numbers into Python floats. The boolean values also have direct correspondence,
+and null is decoded to None.
+
+This parser should be mostly compliant to the high-level specification at
+http://json.org (in other words, I tried to implement the railroad diagrams).
+
+JSON FSM is a toy project developed during my spare time, as an exploration of
+the coroutines concept. As such, its usage is mainly recommended for educational
+purposes. It may contain several show-stopping bugs, but works neatly most of
+the time.
+
+JSON FSM implements state machines for parsing each of the basic types of JSON
+objects, along with a type-generic coroutine and the familiar loads(), all of
+which have a simple interface. For instance, parsing a string should be
+something like:
+
+>>> parser = jsonfsm.string_fsm()
+>>> for c in json:
+...     value = parser.send(c) # send each character in the json
+>>> print value # the JSON string
+
+Please consult the docstrings of the individual coroutines for more information.
+
+AUTHOR
+Guilherme P. Gonçalves, guilherme.p.gonc@gmail.com
+'''
+
 
 NOT_PARSED_YET = object()
 
