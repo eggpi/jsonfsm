@@ -45,5 +45,7 @@ class TestString(unittest.TestCase):
     def test_control_characters(self):
         self.assertTrue('\n' in jsonfsm.loads(self.multiline_json_string))
 
+        self.assertEquals(jsonfsm.loads('"\u2022"'), u"•")
+
 if __name__ == "__main__":
     unittest.main()
