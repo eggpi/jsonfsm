@@ -132,5 +132,18 @@ class TestObject(unittest.TestCase):
                               jsonfsm.loads,
                               json)
 
+class TestConformanceWithStdlib(unittest.TestCase):
+    import glob
+    import json
+
+    def setUp(self):
+        self.json_files = self.glob.glob("tests/*.json")
+
+    def test_conformance(self):
+        for json in self.json_files:
+            with open(json) as infile:
+                data = infile.read()
+                self.assertEquals(jsonfsm.loads(data), self.json.loads(data))
+
 if __name__ == "__main__":
     unittest.main()
