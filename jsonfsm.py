@@ -217,11 +217,11 @@ def array_fsm():
     if c != '[':
         raise JSONParseError("Arrays must begin with [")
 
-    while c != ']':
+    c = (yield NOT_PARSED_YET)
+    while c.isspace():
         c = (yield NOT_PARSED_YET)
-        while c.isspace():
-            c = (yield NOT_PARSED_YET)
 
+    while c != ']':
         vp = value_fsm()
         value = NOT_PARSED_YET
 
@@ -232,6 +232,16 @@ def array_fsm():
             if value is not NOT_PARSED_YET:
                 while c.isspace():
                     c = (yield NOT_PARSED_YET)
+
+        # if we stopped at a , advance until the start of the next value
+        # (and raise exception if the array ends)
+        if c == ',':
+            c = (yield NOT_PARSED_YET)
+            while c.isspace():
+                c = (yield NOT_PARSED_YET)
+
+            if c == ']':
+                raise JSONParseError("Extra , before ] in array")
 
         array.append(value)
 

@@ -80,5 +80,30 @@ class TestNumber(unittest.TestCase):
                               jsonfsm.loads,
                               invalid)
 
+class TestArray(unittest.TestCase):
+    def setUp(self):
+        self.valid = (
+            ('[]', []),
+            ("[1]", [1.0]),
+            ("[ 1,   2,  3]", [1.0, 2.0, 3.0]),
+            ('[   "a string with ]"]', [u"a string with ]"]),
+            ('[ ["nested array"], 1]', [[u"nested array"], 1.0]),
+        )
+
+        self.invalid = (
+            "[,]",
+            "[1,]",
+        )
+
+    def test_valid_arrays(self):
+        for json, expected in self.valid:
+            self.assertEquals(jsonfsm.loads(json), expected)
+
+    def test_invalid_arrays(self):
+        for json in self.invalid:
+            self.assertRaises(jsonfsm.JSONParseError,
+                              jsonfsm.loads,
+                              json)
+
 if __name__ == "__main__":
     unittest.main()
