@@ -192,6 +192,8 @@ def number_fsm():
             digits.append(c)
             c = (yield build_number())
 
+        raise JSONParseError("Unexpected character in number: %s" % c)
+
     else:
         raise JSONParseError("Unexpected character in number: %s" % c)
 
