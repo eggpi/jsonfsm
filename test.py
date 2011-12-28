@@ -51,5 +51,34 @@ class TestString(unittest.TestCase):
                           jsonfsm.loads,
                           self.json_string[:-1] + r'\k"')
 
+class TestNumber(unittest.TestCase):
+    def setUp(self):
+        self.numbers = (
+            "1",
+            "0",
+            "0.04",
+            "1.02",
+            "35.2e1",
+            "52e-2",
+        )
+
+        self.invalid = (
+            "01",
+            "00",
+            ".45",
+            "1e-0.2",
+            "0.01e",
+        )
+
+    def test_valid_numbers(self):
+        for n in self.numbers:
+            self.assertEquals(jsonfsm.loads(n), float(n))
+
+    def test_invalid_numbers(self):
+        for invalid in self.invalid:
+            self.assertRaises(jsonfsm.JSONParseError,
+                              jsonfsm.loads,
+                              invalid)
+
 if __name__ == "__main__":
     unittest.main()
