@@ -109,6 +109,7 @@ def string_fsm():
             elif c == 'r': value.append('\r')
             elif c == 't': value.append('\t')
             elif c in ('"', '\\', '/'): value.append(c)
+            else: raise JSONParseError("Invalid escape character")
         else:
             value.append(c)
 

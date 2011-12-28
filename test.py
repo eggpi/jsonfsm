@@ -47,5 +47,9 @@ class TestString(unittest.TestCase):
 
         self.assertEquals(jsonfsm.loads('"\u2022"'), u"•")
 
+        self.assertRaises(jsonfsm.JSONParseError,
+                          jsonfsm.loads,
+                          self.json_string[:-1] + r'\k"')
+
 if __name__ == "__main__":
     unittest.main()
