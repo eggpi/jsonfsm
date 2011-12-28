@@ -105,5 +105,32 @@ class TestArray(unittest.TestCase):
                               jsonfsm.loads,
                               json)
 
+class TestObject(unittest.TestCase):
+    def setUp(self):
+        self.valid = (
+            ('{}', {}),
+            ('{"one": 1}', {u"one": 1.0}),
+            ('{ "one" :1, "two": 2}', {u"one":1.0, u"two":2.0}),
+            ('{"delimiter": "}" }', {u"delimiter": u"}"}),
+            ('{"nested": {"object": "here"}}', {u"nested": {u"object": u"here"}}),
+        )
+
+        self.invalid = (
+            "{,}",
+            '{"key":}',
+            '{:"value"}',
+            '{"extra" : "comma",}',
+        )
+
+    def test_valid_objects(self):
+        for json, expected in self.valid:
+            self.assertEquals(jsonfsm.loads(json), expected)
+
+    def test_invalid_objects(self):
+        for json in self.invalid:
+            self.assertRaises(jsonfsm.JSONParseError,
+                              jsonfsm.loads,
+                              json)
+
 if __name__ == "__main__":
     unittest.main()

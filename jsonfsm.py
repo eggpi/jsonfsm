@@ -265,11 +265,11 @@ def object_fsm():
     if c != '{':
         raise JSONParseError("Objects must begin with {")
 
-    while c != '}':
+    c = (yield NOT_PARSED_YET)
+    while c.isspace():
         c = (yield NOT_PARSED_YET)
-        while c.isspace():
-            c = (yield NOT_PARSED_YET)
 
+    while c != '}':
         # parse attribute key
         key = NOT_PARSED_YET
         sp = string_fsm()
@@ -288,6 +288,7 @@ def object_fsm():
             c = (yield NOT_PARSED_YET)
 
         # parse value
+        value = NOT_PARSED_YET
         vp = value_fsm()
 
         # look out for , and } since they act as delimiters for numbers
@@ -297,6 +298,16 @@ def object_fsm():
             if value is not NOT_PARSED_YET:
                 while c.isspace():
                     c = (yield NOT_PARSED_YET)
+
+        # if we stopped at a , advance until the start of the next key/value
+        # pair (and raise exception if the object ends)
+        if c == ',':
+            c = (yield NOT_PARSED_YET)
+            while c.isspace():
+                c = (yield NOT_PARSED_YET)
+
+            if c == '}':
+                raise JSONParseError("Extra , before } in object")
 
         obj[key] = value
 
